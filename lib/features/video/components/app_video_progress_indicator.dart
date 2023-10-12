@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class PrimaryVideoProgressIndicator extends StatefulWidget {
-  const PrimaryVideoProgressIndicator(
+class AppVideoProgressIndicator extends StatefulWidget {
+  const AppVideoProgressIndicator(
     this.controller, {
     required this.allowScrubbing,
     super.key,
@@ -18,12 +18,11 @@ class PrimaryVideoProgressIndicator extends StatefulWidget {
   final double? progressBarHeight;
 
   @override
-  State<PrimaryVideoProgressIndicator> createState() =>
+  State<AppVideoProgressIndicator> createState() =>
       _VideoProgressIndicatorState();
 }
 
-class _VideoProgressIndicatorState
-    extends State<PrimaryVideoProgressIndicator> {
+class _VideoProgressIndicatorState extends State<AppVideoProgressIndicator> {
   _VideoProgressIndicatorState() {
     listener = () {
       if (!mounted) {
