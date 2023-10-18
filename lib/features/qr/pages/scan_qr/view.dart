@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class QRCodeScreen extends ConsumerStatefulWidget {
-  const QRCodeScreen({super.key});
+class ScanQrPage extends ConsumerStatefulWidget {
+  const ScanQrPage({super.key});
+
+  static const path = '/scan-qr';
 
   @override
   ConsumerState createState() => _QRCodeScreenState();
 }
 
-class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
+class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
   late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -38,44 +40,28 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
           'QRコードをスキャン',
         ),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 4,
-              child: QRView(
-                key: qrKey,
-                overlay: QrScannerOverlayShape(
-                  borderRadius: 10,
-                  borderLength: 30,
-                  borderWidth: 10,
-                  cutOutSize: scanArea * 1.5,
-                ),
-                onQRViewCreated: (controller) =>
-                    _onQRViewCreated(controller, context, ref),
-                onPermissionSet: (ctrl, permission) async => _onPermissionSet(
-                  context,
-                  permission,
-                ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 4,
+            child: QRView(
+              key: qrKey,
+              overlay: QrScannerOverlayShape(
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+                cutOutSize: scanArea * 1.5,
+              ),
+              onQRViewCreated: (controller) =>
+                  _onQRViewCreated(controller, context, ref),
+              onPermissionSet: (ctrl, permission) async => _onPermissionSet(
+                context,
+                permission,
               ),
             ),
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18),
-                    child: Text(
-                      'QRコードをスキャンしてください。',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+          const Spacer(),
+        ],
       ),
     );
   }
@@ -94,12 +80,14 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
       controller.dispose();
       final String? data = scanData.code;
 
+      // TODO: GrapePageへ遷移
+
       debugPrint(data);
     });
   }
 
   Future<void> _onPermissionSet(BuildContext context, bool permission) async {
-    // 許可されなかった場合は、アラートを表示
+    // カメラの使用を許可されなかった場合は、アラートを表示
     if (!permission) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
