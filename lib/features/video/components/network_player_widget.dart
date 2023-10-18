@@ -9,6 +9,7 @@ class NetworkPlayerWidget extends StatefulWidget {
   const NetworkPlayerWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NetworkPlayerWidgetState createState() => _NetworkPlayerWidgetState();
 }
 

@@ -8,6 +8,7 @@ class AssetPlayerWidget extends StatefulWidget {
   const AssetPlayerWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AssetPlayerWidgetState createState() => _AssetPlayerWidgetState();
 }
 
@@ -19,9 +20,10 @@ class _AssetPlayerWidgetState extends State<AssetPlayerWidget> {
   void initState() {
     super.initState();
     controller = VideoPlayerController.asset(asset)
-      ..addListener(() => setState(() {}))
-      ..setLooping(true)
-      ..initialize().then((_) => unawaited(controller.play()));
+      ..addListener(() => setState(() {}));
+    unawaited(controller.setLooping(true));
+    unawaited(
+        controller.initialize().then((_) => unawaited(controller.play())));
   }
 
   @override
@@ -31,16 +33,12 @@ class _AssetPlayerWidgetState extends State<AssetPlayerWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final isMuted = controller.value.volume == 0;
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: VideoPlayerWidget(controller: controller),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: VideoPlayerWidget(controller: controller),
+          ),
+        ],
+      );
 }

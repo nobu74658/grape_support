@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:grape_support/features/video/video_state.dart';
+import 'package:grape_support/features/video/pages/watch_video/state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_player/video_player.dart';
 
-part 'video_view_model.g.dart';
+part 'view_model.g.dart';
 
 enum VideoSorceType {
   network,
