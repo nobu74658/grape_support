@@ -12,6 +12,9 @@ class GrapeDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('GrapeDetailsPage'),
+        ),
         body: Center(
           child: Text('grapeId: $grapeId'),
         ),

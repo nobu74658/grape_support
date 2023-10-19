@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:grape_support/features/grape/pages/grape_list/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view.dart';
 import 'package:grape_support/features/qr/pages/scan_qr/view.dart';
-import 'package:grape_support/utils/padding.dart';
+import 'package:grape_support/utils/constants/padding.dart';
 
 enum NextPageType {
   createQR(CreateQrPage.path, 'QRコード作成', Icons.qr_code),

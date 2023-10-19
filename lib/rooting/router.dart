@@ -4,6 +4,7 @@ import 'package:grape_support/features/grape/pages/grape_details/view.dart';
 import 'package:grape_support/features/grape/pages/grape_list/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view.dart';
 import 'package:grape_support/features/qr/pages/scan_qr/view.dart';
+import 'package:grape_support/utils/constants/keys.dart';
 import 'package:grape_support/utils/extension/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,9 +24,9 @@ GoRouter router(RouterRef ref) => GoRouter(
               builder: (context, state) => const GrapeListPage(),
             ),
             GoRoute(
-              path: '${GrapeDetailsPage.path.deleteSlash}/:grapeId',
+              path: '${GrapeDetailsPage.path.deleteSlash}/:${Keys.grapeId}',
               builder: (context, state) => GrapeDetailsPage(
-                grapeId: state.pathParameters['grapeId'] ?? '',
+                grapeId: state.pathParameters[Keys.grapeId] ?? '',
               ),
             ),
 

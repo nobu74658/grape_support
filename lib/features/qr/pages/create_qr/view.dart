@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +6,7 @@ import 'package:grape_support/features/grape/pages/grape_details/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view_model.dart';
 import 'package:grape_support/primary/bottom_elevated_button.dart';
 import 'package:grape_support/primary/primary_when_widget.dart';
+import 'package:grape_support/primary/show_dialog.dart';
 import 'package:printing/printing.dart';
 
 class CreateQrPage extends ConsumerWidget {
@@ -27,7 +29,7 @@ class CreateQrPage extends ConsumerWidget {
           title: const Text('新規登録'),
         ),
         body: PdfPreview(
-          build: (format) async => data.save(),
+          build: (format) async => data.pdf.save(),
           allowPrinting: false,
           allowSharing: false,
           canChangePageFormat: false,
@@ -35,15 +37,21 @@ class CreateQrPage extends ConsumerWidget {
           canDebug: false,
         ),
         bottomNavigationBar: BottomElevatedButton(
-          onPressed: () async {
-            await ref
-                .read(createQrViewModelProvider.notifier)
-                .setGrape()
-                .then((value) => context.push('${GrapeDetailsPage.path}/$value'));
-          },
+          onPressed: () async => _onPressed(context, ref, data.grapeId),
           child: const Text('登録する'),
         ),
       ),
+    );
+  }
+
+  Future<void> _onPressed(
+      BuildContext context, WidgetRef ref, String grapeId) async {
+    unawaited(SD.circular(context));
+    await ref.read(createQrViewModelProvider.notifier).setGrape().then(
+      (value) {
+        context.pop(); // circular
+        return context.push('${GrapeDetailsPage.path}/$grapeId');
+      },
     );
   }
 }
