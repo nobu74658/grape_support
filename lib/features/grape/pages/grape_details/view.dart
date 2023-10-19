@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grape_support/utils/constants/padding.dart';
 
 class GrapeDetailsPage extends StatelessWidget {
   const GrapeDetailsPage({
@@ -15,8 +16,15 @@ class GrapeDetailsPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('GrapeDetailsPage'),
         ),
-        body: Center(
-          child: Text('grapeId: $grapeId'),
+        body: Column(
+          children: [
+            Text('grapeId: $grapeId'),
+            const SizedBox(height: PaddingStyle.p8),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('動画を確認'),
+            ),
+          ],
         ),
       );
 }
