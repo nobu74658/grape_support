@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grape_support/features/qr/pages/create_qr/state.dart';
-import 'package:grape_support/utils/constants/keys.dart';
+import 'package:grape_support/repositories/grape/repo.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -44,16 +43,9 @@ class CreateQrViewModel extends _$CreateQrViewModel {
   }
 
   Future<String> setGrape() async {
-    final db = FirebaseFirestore.instance;
-    final doc =
-        db.collection(Keys.grapeCollection).doc(state.requireValue.grapeId);
+    final grapeId = state.requireValue.grapeId;
+    await ref.read(grapeRepoProvider.notifier).create(grapeId);
 
-    await doc.set({
-      'grapeId': doc.id,
-      'name': 'test',
-      'createdAt': DateTime.now(),
-    });
-
-    return doc.id;
+    return grapeId;
   }
 }

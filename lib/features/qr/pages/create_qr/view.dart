@@ -45,7 +45,10 @@ class CreateQrPage extends ConsumerWidget {
   }
 
   Future<void> _onPressed(
-      BuildContext context, WidgetRef ref, String grapeId) async {
+    BuildContext context,
+    WidgetRef ref,
+    String grapeId,
+  ) async {
     unawaited(SD.circular(context));
     await ref.read(createQrViewModelProvider.notifier).setGrape().then(
       (value) {
