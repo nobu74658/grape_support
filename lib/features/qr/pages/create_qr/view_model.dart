@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grape_support/features/qr/pages/create_qr/state.dart';
+import 'package:grape_support/utils/constants/keys.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -10,15 +12,22 @@ part 'view_model.g.dart';
 @riverpod
 class CreateQrViewModel extends _$CreateQrViewModel {
   @override
-  Future<Document> build() async => createQrCode();
+  Future<CreateQrState> build() async {
+    final grapeId = const Uuid().v4();
+    final pdf = await createQrCode(grapeId);
+    return CreateQrState(
+      pdf: pdf,
+      grapeId: grapeId,
+    );
+  }
 
-  Future<Document> createQrCode() async {
-    final pdf = Document(author: 'imp');
+  Future<Document> createQrCode(String grapeId) async {
+    final pdf = Document(author: 'imp.grape');
     const double qrCodeSize = PdfPageFormat.cm * 5;
 
     final qrCode = pw.BarcodeWidget(
       barcode: pw.Barcode.qrCode(),
-      data: const Uuid().v4(),
+      data: grapeId,
       width: qrCodeSize,
       height: qrCodeSize,
     );
@@ -36,7 +45,8 @@ class CreateQrViewModel extends _$CreateQrViewModel {
 
   Future<String> setGrape() async {
     final db = FirebaseFirestore.instance;
-    final doc = db.collection('grapes').doc();
+    final doc =
+        db.collection(Keys.grapeCollection).doc(state.requireValue.grapeId);
 
     await doc.set({
       'grapeId': doc.id,

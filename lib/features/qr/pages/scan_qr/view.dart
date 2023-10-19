@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:grape_support/features/grape/pages/grape_details/view.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQrPage extends ConsumerStatefulWidget {
@@ -54,10 +56,8 @@ class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
               ),
               onQRViewCreated: (controller) =>
                   _onQRViewCreated(controller, context, ref),
-              onPermissionSet: (ctrl, permission) async => _onPermissionSet(
-                context,
-                permission,
-              ),
+              onPermissionSet: (ctrl, permission) async =>
+                  _onPermissionSet(context, permission),
             ),
           ),
           const Spacer(),
@@ -71,18 +71,15 @@ class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
     BuildContext context,
     WidgetRef ref,
   ) {
-    setState(() {
-      this.controller = controller;
-    });
+    setState(() => this.controller = controller);
 
     /// QRコードを読み取りをリッスンして処理を走らせる
     controller.scannedDataStream.listen((scanData) async {
       controller.dispose();
       final String? data = scanData.code;
-
-      // TODO: GrapePageへ遷移
-
       debugPrint(data);
+
+      await context.push('${GrapeDetailsPage.path}/$data}');
     });
   }
 
