@@ -4,6 +4,7 @@ import 'package:grape_support/features/grape/pages/grape_details/view.dart';
 import 'package:grape_support/features/grape/pages/grape_list/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view.dart';
 import 'package:grape_support/features/qr/pages/scan_qr/view.dart';
+import 'package:grape_support/features/video/pages/watch_video/view.dart';
 import 'package:grape_support/utils/constants/keys.dart';
 import 'package:grape_support/utils/extension/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,6 +39,12 @@ GoRouter router(RouterRef ref) => GoRouter(
             GoRoute(
               path: ScanQrPage.path.deleteSlash,
               builder: (context, state) => const ScanQrPage(),
+            ),
+
+            /// video
+            GoRoute(
+              path: WatchVideoScreen.path.deleteSlash,
+              builder: (context, state) => const WatchVideoScreen(),
             ),
           ],
         ),

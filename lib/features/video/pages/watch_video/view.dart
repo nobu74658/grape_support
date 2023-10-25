@@ -8,6 +8,8 @@ import 'package:video_player/video_player.dart';
 class WatchVideoScreen extends StatefulWidget {
   const WatchVideoScreen({super.key});
 
+  static const path = '/watch-video';
+
   @override
   // ignore: library_private_types_in_public_api
   _WatchVideoScreenState createState() => _WatchVideoScreenState();
@@ -15,7 +17,8 @@ class WatchVideoScreen extends StatefulWidget {
 
 class _WatchVideoScreenState extends State<WatchVideoScreen> {
   final textController = TextEditingController(
-    text: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    text:
+        'https://firebasestorage.googleapis.com/v0/b/imp-grape-support.appspot.com/o/videos%2Fgrapes%2FgrapeTestId.MP4?alt=media&token=5dd4ca86-f0aa-4f73-9994-0d00e3cf8f9d&_gl=1*1ng9p9f*_ga*NTY1MTM1OTEwLjE2OTcyOTA5NTY.*_ga_CW55HF8NVT*MTY5ODEyNTM2OS42LjEuMTY5ODEyNzQ2MC42MC4wLjA.',
   );
   VideoPlayerController? controller;
 
