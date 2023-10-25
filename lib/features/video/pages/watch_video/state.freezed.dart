@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$VideoState {
-  VideoPlayerController? get controller => throw _privateConstructorUsedError;
+  Grape get grape => throw _privateConstructorUsedError;
+  VideoPlayerController get controller => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $VideoStateCopyWith<VideoState> get copyWith =>
@@ -29,7 +30,9 @@ abstract class $VideoStateCopyWith<$Res> {
           VideoState value, $Res Function(VideoState) then) =
       _$VideoStateCopyWithImpl<$Res, VideoState>;
   @useResult
-  $Res call({VideoPlayerController? controller});
+  $Res call({Grape grape, VideoPlayerController controller});
+
+  $GrapeCopyWith<$Res> get grape;
 }
 
 /// @nodoc
@@ -45,14 +48,27 @@ class _$VideoStateCopyWithImpl<$Res, $Val extends VideoState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? controller = freezed,
+    Object? grape = null,
+    Object? controller = null,
   }) {
     return _then(_value.copyWith(
-      controller: freezed == controller
+      grape: null == grape
+          ? _value.grape
+          : grape // ignore: cast_nullable_to_non_nullable
+              as Grape,
+      controller: null == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+              as VideoPlayerController,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GrapeCopyWith<$Res> get grape {
+    return $GrapeCopyWith<$Res>(_value.grape, (value) {
+      return _then(_value.copyWith(grape: value) as $Val);
+    });
   }
 }
 
@@ -64,7 +80,10 @@ abstract class _$$VideoStateImplCopyWith<$Res>
       __$$VideoStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({VideoPlayerController? controller});
+  $Res call({Grape grape, VideoPlayerController controller});
+
+  @override
+  $GrapeCopyWith<$Res> get grape;
 }
 
 /// @nodoc
@@ -78,13 +97,18 @@ class __$$VideoStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? controller = freezed,
+    Object? grape = null,
+    Object? controller = null,
   }) {
     return _then(_$VideoStateImpl(
-      controller: freezed == controller
+      grape: null == grape
+          ? _value.grape
+          : grape // ignore: cast_nullable_to_non_nullable
+              as Grape,
+      controller: null == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+              as VideoPlayerController,
     ));
   }
 }
@@ -92,14 +116,16 @@ class __$$VideoStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$VideoStateImpl implements _VideoState {
-  const _$VideoStateImpl({this.controller});
+  const _$VideoStateImpl({required this.grape, required this.controller});
 
   @override
-  final VideoPlayerController? controller;
+  final Grape grape;
+  @override
+  final VideoPlayerController controller;
 
   @override
   String toString() {
-    return 'VideoState(controller: $controller)';
+    return 'VideoState(grape: $grape, controller: $controller)';
   }
 
   @override
@@ -107,12 +133,13 @@ class _$VideoStateImpl implements _VideoState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$VideoStateImpl &&
+            (identical(other.grape, grape) || other.grape == grape) &&
             (identical(other.controller, controller) ||
                 other.controller == controller));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, controller);
+  int get hashCode => Object.hash(runtimeType, grape, controller);
 
   @JsonKey(ignore: true)
   @override
@@ -122,11 +149,14 @@ class _$VideoStateImpl implements _VideoState {
 }
 
 abstract class _VideoState implements VideoState {
-  const factory _VideoState({final VideoPlayerController? controller}) =
-      _$VideoStateImpl;
+  const factory _VideoState(
+      {required final Grape grape,
+      required final VideoPlayerController controller}) = _$VideoStateImpl;
 
   @override
-  VideoPlayerController? get controller;
+  Grape get grape;
+  @override
+  VideoPlayerController get controller;
   @override
   @JsonKey(ignore: true)
   _$$VideoStateImplCopyWith<_$VideoStateImpl> get copyWith =>

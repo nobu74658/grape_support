@@ -1,78 +1,33 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:grape_support/features/video/components/floating_action_button_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grape_support/features/video/components/video_player_widget.dart';
-import 'package:video_player/video_player.dart';
+import 'package:grape_support/features/video/pages/watch_video/view_model.dart';
+import 'package:grape_support/primary/primary_when_widget.dart';
 
-class WatchVideoScreen extends StatefulWidget {
-  const WatchVideoScreen({super.key});
+class WatchVideoScreen extends ConsumerWidget {
+  const WatchVideoScreen({
+    required this.videoUrl,
+    super.key,
+  });
 
   static const path = '/watch-video';
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _WatchVideoScreenState createState() => _WatchVideoScreenState();
-}
-
-class _WatchVideoScreenState extends State<WatchVideoScreen> {
-  final textController = TextEditingController(
-    text:
-        'https://firebasestorage.googleapis.com/v0/b/imp-grape-support.appspot.com/o/videos%2Fgrapes%2FgrapeTestId.MP4?alt=media&token=5dd4ca86-f0aa-4f73-9994-0d00e3cf8f9d&_gl=1*1ng9p9f*_ga*NTY1MTM1OTEwLjE2OTcyOTA5NTY.*_ga_CW55HF8NVT*MTY5ODEyNTM2OS42LjEuMTY5ODEyNzQ2MC42MC4wLjA.',
-  );
-  VideoPlayerController? controller;
+  final String videoUrl;
 
   @override
-  void dispose() {
-    unawaited(controller?.dispose());
-    super.dispose();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(videoViewModelProvider(videoUrl));
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: (controller == null)
-            ? buildTextField()
-            : GestureDetector(
-                onTap: () => primaryFocus?.unfocus(),
-                child: ListView(
-                  children: [
-                    buildTextField(),
-                    VideoPlayerWidget(controller: controller!),
-                  ],
-                ),
-              ),
-        floatingActionButton: FloatingActionButtonWidget(
-          onPressed: () async {
-            await initializeVideo();
-          },
-        ),
-      );
-
-  Widget buildTextField() => Container(
-        padding: const EdgeInsets.all(32),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: textController,
-              ),
-            ),
-            const SizedBox(width: 12),
-          ],
-        ),
-      );
-
-  Future<void> initializeVideo() async {
-    final controller = VideoPlayerController.networkUrl(
-      Uri.parse(textController.text.trim()),
-    );
-    unawaited(
-      controller.initialize().then((_) {
-        controller
-          ..setVolume(0)
-          ..play();
-        setState(() => this.controller = controller);
-      }),
+    return state.when(
+      error: (err, stack) => PrimaryWhenWidget(
+        whenType: WhenType.error,
+        errorMessage: err.toString(),
+      ),
+      loading: () => const PrimaryWhenWidget(whenType: WhenType.loading),
+      data: (data) => Scaffold(
+        appBar: AppBar(),
+        body: VideoPlayerWidget(controller: data.controller!),
+      ),
     );
   }
 }
