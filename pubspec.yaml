@@ -48,6 +48,7 @@ dependencies:
   # ジェネレータ
   build_runner: ^2.4.6
   json_serializable: ^6.7.1
+  firebase_core: ^2.17.0
 
 dev_dependencies:
   flutter_test:

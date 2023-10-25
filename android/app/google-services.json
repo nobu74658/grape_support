@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "466821344683",
+    "project_id": "imp-grape-support",
+    "storage_bucket": "imp-grape-support.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466821344683:android:188397a5c0e293009576ee",
+        "android_client_info": {
+          "package_name": "com.example.grape_support"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtFT79_mIrU6nHHGGhf-1o8i5g5F2fB4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
