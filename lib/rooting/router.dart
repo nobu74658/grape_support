@@ -43,8 +43,10 @@ GoRouter router(RouterRef ref) => GoRouter(
 
             /// video
             GoRoute(
-              path: WatchVideoScreen.path.deleteSlash,
-              builder: (context, state) => const WatchVideoScreen(),
+              path: '${WatchVideoScreen.path.deleteSlash}/:${Keys.grapeId}',
+              builder: (context, state) => WatchVideoScreen(
+                videoUrl: state.pathParameters[Keys.grapeId] ?? '',
+              ),
             ),
           ],
         ),
