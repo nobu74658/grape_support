@@ -79,7 +79,7 @@ class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
       final String? data = scanData.code;
       debugPrint(data);
 
-      await context.push('${GrapeDetailsPage.path}/$data}');
+      await context.push('${GrapeDetailsPage.path}/$data');
     });
   }
 
