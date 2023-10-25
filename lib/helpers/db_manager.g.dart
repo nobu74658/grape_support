@@ -6,7 +6,7 @@ part of 'db_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dbManagerHash() => r'04c83ba1037146a4e455f3aedfe68fffc7ffb5aa';
+String _$dbManagerHash() => r'806b0409c63edfc5984d2c79203b96d7635419b9';
 
 /// See also [DbManager].
 @ProviderFor(DbManager)

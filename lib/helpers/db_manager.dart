@@ -33,14 +33,14 @@ class DbManager extends _$DbManager {
     await documentReference.update(jsonData);
   }
 
-  Future<T?> getDoc<T>(
+  Future<T> getDoc<T>(
     DocumentReference<T> documentReference,
   ) async {
     final snapshot = await documentReference.get();
     if (!snapshot.exists) {
       throw Exception('Document does not exist');
     }
-    return snapshot.data();
+    return snapshot.data()!;
   }
 
   Stream<DocumentSnapshot<T>> streamDoc<T>(
