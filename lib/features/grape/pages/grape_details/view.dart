@@ -20,6 +20,7 @@ class GrapeDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(grapeDetailsViewModelProvider(grapeId));
+    
     return state.when(
       error: (err, stack) => PrimaryWhenWidget(
         whenType: WhenType.error,
