@@ -26,7 +26,7 @@ class WatchVideoScreen extends ConsumerWidget {
       loading: () => const PrimaryWhenWidget(whenType: WhenType.loading),
       data: (data) => Scaffold(
         appBar: AppBar(),
-        body: VideoPlayerWidget(controller: data.controller!),
+        body: VideoPlayerWidget(controller: data.controller),
       ),
     );
   }
