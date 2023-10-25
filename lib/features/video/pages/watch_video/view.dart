@@ -5,14 +5,15 @@ import 'package:grape_support/features/video/components/floating_action_button_w
 import 'package:grape_support/features/video/components/video_player_widget.dart';
 import 'package:video_player/video_player.dart';
 
-class NetworkPlayerWidget extends StatefulWidget {
-  const NetworkPlayerWidget({super.key});
+class WatchVideoScreen extends StatefulWidget {
+  const WatchVideoScreen({super.key});
 
   @override
-  _NetworkPlayerWidgetState createState() => _NetworkPlayerWidgetState();
+  // ignore: library_private_types_in_public_api
+  _WatchVideoScreenState createState() => _WatchVideoScreenState();
 }
 
-class _NetworkPlayerWidgetState extends State<NetworkPlayerWidget> {
+class _WatchVideoScreenState extends State<WatchVideoScreen> {
   final textController = TextEditingController(
     text: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
   );

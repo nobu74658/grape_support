@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+/// video_player の ProgressIndicator は height が固定であるため、可変の Indicator を作成
 class AppVideoProgressIndicator extends StatefulWidget {
   const AppVideoProgressIndicator(
     this.controller, {

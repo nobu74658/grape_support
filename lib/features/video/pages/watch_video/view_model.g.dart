@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'video_view_model.dart';
+part of 'view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoViewModelHash() => r'f2a407306e9bf34234fec077861c5d50f7763a85';
+String _$videoViewModelHash() => r'0a43e787810378f6ae4a0527ddab2871c2f1c2ff';
 
 /// See also [VideoViewModel].
 @ProviderFor(VideoViewModel)
