@@ -6,12 +6,11 @@ part of 'repo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$grapeCollectionHash() => r'f3e9136b6112e40bc29a0a61898d240ece09b5c6';
+String _$grapeCollectionHash() => r'1bf1b25b755a6b4e1ac6386ad485c0a7f3d19782';
 
 /// See also [grapeCollection].
 @ProviderFor(grapeCollection)
-final grapeCollectionProvider =
-    Provider<CollectionReference<Map<String, dynamic>>>.internal(
+final grapeCollectionProvider = Provider<CollectionReference<Grape>>.internal(
   grapeCollection,
   name: r'grapeCollectionProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,9 +20,8 @@ final grapeCollectionProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GrapeCollectionRef
-    = ProviderRef<CollectionReference<Map<String, dynamic>>>;
-String _$grapeRepoHash() => r'483e66e507db897992651e5fd7e95fdcb2fac388';
+typedef GrapeCollectionRef = ProviderRef<CollectionReference<Grape>>;
+String _$grapeRepoHash() => r'681be4f9097eaa27ef7d7e44cbd8148996eff020';
 
 /// See also [GrapeRepo].
 @ProviderFor(GrapeRepo)
