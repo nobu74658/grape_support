@@ -57,15 +57,6 @@ class EntrancePage extends StatelessWidget {
                   ),
                 ),
               ),
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'https://firebasestorage.googleapis.com/v0/b/imp-grape-support.appspot.com/o/videos%2Fgrapes%2FIMG_6935.PNG?alt=media&token=8bd55e44-068e-4327-be7f-500db304ce79'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
           ],
         ),
       );
