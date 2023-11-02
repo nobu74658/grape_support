@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,15 +17,6 @@ class ScanQrPage extends ConsumerStatefulWidget {
 class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
   late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  @override
-  Future<void> reassemble() async {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      await controller.pauseCamera();
-    }
-    await controller.resumeCamera();
-  }
 
   @override
   void dispose() {
@@ -75,11 +66,11 @@ class _QRCodeScreenState extends ConsumerState<ScanQrPage> {
 
     /// QRコードを読み取りをリッスンして処理を走らせる
     controller.scannedDataStream.listen((scanData) async {
-      controller.dispose();
+      unawaited(controller.pauseCamera());
       final String? data = scanData.code;
       debugPrint(data);
 
-      await context.push('${GrapeDetailsPage.path}/$data');
+      context.pushReplacement('${GrapeDetailsPage.path}/$data');
     });
   }
 

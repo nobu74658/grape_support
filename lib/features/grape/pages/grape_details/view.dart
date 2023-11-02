@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +19,7 @@ class GrapeDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(grapeDetailsViewModelProvider(grapeId));
-    
+
     return state.when(
       error: (err, stack) => PrimaryWhenWidget(
         whenType: WhenType.error,
