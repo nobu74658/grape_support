@@ -9,14 +9,14 @@ import 'package:grape_support/primary/primary_when_widget.dart';
 import 'package:grape_support/primary/show_dialog.dart';
 import 'package:printing/printing.dart';
 
-class CreateQrPage extends ConsumerWidget {
-  const CreateQrPage({super.key});
+class CreateQRPage extends ConsumerWidget {
+  const CreateQRPage({super.key});
 
   static const path = '/create-qr';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(createQrViewModelProvider);
+    final state = ref.watch(createQRViewModelProvider);
 
     return state.when(
       error: (err, stack) => PrimaryWhenWidget(
@@ -50,7 +50,7 @@ class CreateQrPage extends ConsumerWidget {
     String grapeId,
   ) async {
     unawaited(SD.circular(context));
-    await ref.read(createQrViewModelProvider.notifier).setGrape().then(
+    await ref.read(createQRViewModelProvider.notifier).setGrape().then(
       (value) {
         context.pop(); // circular
         return context.push('${GrapeDetailsPage.path}/$grapeId');

@@ -9,12 +9,12 @@ import 'package:uuid/uuid.dart';
 part 'view_model.g.dart';
 
 @riverpod
-class CreateQrViewModel extends _$CreateQrViewModel {
+class CreateQRViewModel extends _$CreateQRViewModel {
   @override
-  Future<CreateQrState> build() async {
+  Future<CreateQRState> build() async {
     final grapeId = const Uuid().v4();
     final pdf = await createQrCode(grapeId);
-    return CreateQrState(
+    return CreateQRState(
       pdf: pdf,
       grapeId: grapeId,
     );

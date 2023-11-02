@@ -4,9 +4,9 @@ import 'package:pdf/widgets.dart';
 part 'state.freezed.dart';
 
 @freezed
-abstract class CreateQrState with _$CreateQrState {
-  const factory CreateQrState({
+abstract class CreateQRState with _$CreateQRState {
+  const factory CreateQRState({
     required Document pdf,
     required String grapeId,
-  }) = _CreateQrState;
+  }) = _CreateQRState;
 }

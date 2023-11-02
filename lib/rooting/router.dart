@@ -33,8 +33,8 @@ GoRouter router(RouterRef ref) => GoRouter(
 
             /// qr
             GoRoute(
-              path: CreateQrPage.path.deleteSlash,
-              builder: (context, state) => const CreateQrPage(),
+              path: CreateQRPage.path.deleteSlash,
+              builder: (context, state) => const CreateQRPage(),
             ),
             GoRoute(
               path: ScanQrPage.path.deleteSlash,
