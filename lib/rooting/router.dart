@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grape_support/features/auth/pages/entrance/view.dart';
 import 'package:grape_support/features/grape/pages/grape_details/view.dart';
 import 'package:grape_support/features/grape/pages/grape_list/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view.dart';
 import 'package:grape_support/features/qr/pages/scan_qr/view.dart';
+import 'package:grape_support/features/video/pages/take_video/view.dart';
 import 'package:grape_support/features/video/pages/watch_video/view.dart';
+import 'package:grape_support/providers/camera/camera.dart';
 import 'package:grape_support/utils/constants/keys.dart';
 import 'package:grape_support/utils/extension/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -42,6 +45,18 @@ GoRouter router(RouterRef ref) => GoRouter(
             ),
 
             /// video
+            GoRoute(
+              path: TakeVideoScreen.path.deleteSlash,
+              // TODO: fix 初期化処理
+              builder: (context, state) {
+                final state = ref.watch(cameraProvider);
+                return state.when(
+                  error: (err, stack) => const Scaffold(),
+                  loading: () => const Scaffold(),
+                  data: (camera) => TakeVideoScreen(camera: camera),
+                );
+              },
+            ),
             GoRoute(
               path: '${WatchVideoScreen.path.deleteSlash}/:${Keys.grapeId}',
               builder: (context, state) => WatchVideoScreen(
