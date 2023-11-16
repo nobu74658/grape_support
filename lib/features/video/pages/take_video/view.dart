@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class TakeVideoScreen extends StatefulWidget {
@@ -63,25 +62,54 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       body: CameraPreview(controller),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          try {
-            await controller.startVideoRecording();
-          } on CameraException catch (e) {
-            debugPrint('CameraException: $e');
-            return;
-          }
-          await Future.delayed(const Duration(seconds: 5));
-
-          final video = await controller.stopVideoRecording();
-
-          // 表示用の画面に遷移
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => VideoPreview(videoPath: video.path),
-              fullscreenDialog: true,
-            ),
-          );
+          controller.value.isRecordingVideo
+              ? await _stopVideo(context)
+              : await _startVideo();
         },
-        child: const Icon(Icons.camera),
+        child: controller.value.isRecordingVideo
+            ? const Icon(Icons.stop)
+            : const Icon(Icons.video_call),
+      ),
+    );
+  }
+
+  Future<void> _startVideo() async {
+    try {
+      await controller.startVideoRecording();
+    } on CameraException catch (e) {
+      debugPrint('CameraException: $e');
+      return;
+    }
+    setState(() {});
+  }
+
+  Future<void> _stopVideo(BuildContext context) async {
+    final XFile video = await controller.stopVideoRecording();
+    setState(() {});
+
+    final File file = File(video.path);
+
+    String fileName = 'grape_video_${DateTime.now().millisecondsSinceEpoch}';
+    try {
+      final startTime = DateTime.now();
+      debugPrint('uploading video...$startTime');
+      final storageRef =
+          FirebaseStorage.instance.ref().child('videos/test/$fileName');
+      final task = await storageRef.putFile(file);
+      final url = await task.ref.getDownloadURL();
+      debugPrint('url: $url');
+      final endTime = DateTime.now();
+      debugPrint('uploaded video...$endTime');
+      debugPrint('経過時間: ${endTime.difference(startTime).inMilliseconds}ms');
+      debugPrint('video size: ${file.lengthSync()} bytes');
+    } catch (e) {
+      debugPrint('FirebaseStorageException: $e');
+    }
+    // 表示用の画面に遷移
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => VideoPreview(videoPath: video.path),
+        fullscreenDialog: true,
       ),
     );
   }
