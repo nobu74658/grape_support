@@ -11,7 +11,15 @@ class GrapeDetailsViewModel extends _$GrapeDetailsViewModel {
   Future<GrapeDetailsState> build(String grapeId) async {
     final repo = ref.read(grapeRepoProvider.notifier);
     final Grape grape = await repo.getDoc(grapeId);
+    streamDoc(grapeId);
 
     return GrapeDetailsState(grape: grape);
+  }
+
+  void streamDoc(String grapeId) {
+    final repo = ref.read(grapeRepoProvider.notifier);
+    repo.getDocStream(grapeId).listen((event) {
+      state = AsyncValue.data(state.requireValue.copyWith(grape: event));
+    });
   }
 }

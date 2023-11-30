@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grape_support/features/grape/pages/grape_details/view_model.dart';
+import 'package:grape_support/features/video/pages/take_video/view.dart';
 import 'package:grape_support/primary/primary_when_widget.dart';
 import 'package:grape_support/utils/constants/padding.dart';
+import 'package:grape_support/utils/extension/context.dart';
 
 class GrapeDetailsPage extends ConsumerWidget {
   const GrapeDetailsPage({
@@ -19,6 +21,7 @@ class GrapeDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(grapeDetailsViewModelProvider(grapeId));
+    final cardWidth = (context.deviceWidth - PaddingStyle.p16 * 3) / 2;
 
     return state.when(
       error: (err, stack) => PrimaryWhenWidget(
@@ -26,28 +29,77 @@ class GrapeDetailsPage extends ConsumerWidget {
         errorMessage: err.toString(),
       ),
       loading: () => const PrimaryWhenWidget(whenType: WhenType.loading),
-      data: (data) => Scaffold(
-        appBar: AppBar(
-          title: const Text('GrapeDetailsPage'),
-        ),
-        body: Column(
-          children: [
-            Text('grapeId: ${data.grape.grapeId}'),
-            const SizedBox(height: PaddingStyle.p8),
-            if (data.grape.videoUrl != null)
-              ElevatedButton(
-                onPressed: () {
-                  unawaited(
-                    context.push(
-                      '/watch-video/${data.grape.grapeId}',
+      data: (data) {
+        final bool isVideoUrl = data.grape.videoUrl != null;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('GrapeDetailsPage'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: PaddingStyle.p16),
+            child: Column(
+              children: [
+                Text('grapeId: ${data.grape.grapeId}'),
+                const SizedBox(height: PaddingStyle.p8),
+                Row(
+                  children: [
+                    /// 動画を確認
+                    GestureDetector(
+                      onTap: isVideoUrl
+                          ? () {
+                              unawaited(
+                                context.push(
+                                  '/watch-video/${data.grape.grapeId}',
+                                ),
+                              );
+                            }
+                          : null,
+                      child: Card(
+                        color: isVideoUrl ? null : ThemeData().disabledColor,
+                        margin: EdgeInsets.zero,
+                        child: SizedBox(
+                          width: cardWidth,
+                          height: cardWidth,
+                          child: Center(
+                            child: Text(
+                              '動画を確認',
+                              style: TextStyle(
+                                color: isVideoUrl ? null : Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: const Text('動画を確認'),
-              ),
-          ],
-        ),
-      ),
+
+                    const SizedBox(width: PaddingStyle.p16),
+
+                    /// 動画を撮影
+                    GestureDetector(
+                      onTap: () {
+                        unawaited(
+                          context.push(
+                            '${TakeVideoScreen.path}/${data.grape.grapeId}',
+                          ),
+                        );
+                      },
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        child: SizedBox(
+                          width: cardWidth,
+                          height: cardWidth,
+                          child: const Center(child: Text('動画を撮影')),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

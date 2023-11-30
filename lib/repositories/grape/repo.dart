@@ -34,4 +34,12 @@ class GrapeRepo extends _$GrapeRepo {
     debugPrint('grapeId: $grapeId');
     return _dbManager.getDoc(_grapeCollection.doc(grapeId));
   }
+
+  Stream<Grape> getDocStream(String grapeId) {
+    final stream = _grapeCollection.doc(grapeId).snapshots().map(
+          (snapshot) => snapshot.data()!,
+        );
+    print(stream.first);
+    return stream;
+  }
 }

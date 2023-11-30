@@ -3,14 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:grape_support/features/grape/pages/grape_list/view.dart';
 import 'package:grape_support/features/qr/pages/create_qr/view.dart';
 import 'package:grape_support/features/qr/pages/scan_qr/view.dart';
-import 'package:grape_support/features/video/pages/watch_video/view.dart';
 import 'package:grape_support/utils/constants/padding.dart';
 
 enum NextPageType {
   createQR(CreateQRPage.path, 'QRコード作成', Icons.qr_code),
   scanQR(ScanQrPage.path, 'QRコード読み取り', Icons.camera_alt_outlined),
-  grapeList(GrapeListPage.path, '一覧表示', Icons.list),
-  whatchVideo(WatchVideoScreen.path, '動画視聴', Icons.video_library);
+  grapeList(GrapeListPage.path, '一覧表示', Icons.list);
 
   const NextPageType(
     this.path,
