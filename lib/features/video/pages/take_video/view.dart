@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -9,12 +9,14 @@ import 'package:video_player/video_player.dart';
 class TakeVideoScreen extends StatefulWidget {
   const TakeVideoScreen({
     required this.camera,
+    required this.grapeId,
     super.key,
   });
 
   static const path = '/take_video';
 
   final CameraDescription camera;
+  final String grapeId;
 
   @override
   TakeVideoScreenState createState() => TakeVideoScreenState();
@@ -89,20 +91,33 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
 
     final File file = File(video.path);
 
-    String fileName = 'grape_video_${DateTime.now().millisecondsSinceEpoch}';
+    final String fileName =
+        'grape_video_${DateTime.now().millisecondsSinceEpoch}';
     try {
       final startTime = DateTime.now();
       debugPrint('uploading video...$startTime');
-      final storageRef =
-          FirebaseStorage.instance.ref().child('videos/test/$fileName');
+
+      /// Firebase Storageに動画をアップロード
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('videos/${widget.grapeId}/$fileName');
       final task = await storageRef.putFile(file);
       final url = await task.ref.getDownloadURL();
+
+      /// Firebaseに動画のURLを保存
+      await FirebaseFirestore.instance
+          .collection('grapes')
+          .doc(widget.grapeId)
+          .update({
+        'videoUrl': url,
+      });
+
       debugPrint('url: $url');
       final endTime = DateTime.now();
       debugPrint('uploaded video...$endTime');
       debugPrint('経過時間: ${endTime.difference(startTime).inMilliseconds}ms');
       debugPrint('video size: ${file.lengthSync()} bytes');
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('FirebaseStorageException: $e');
     }
     // 表示用の画面に遷移
