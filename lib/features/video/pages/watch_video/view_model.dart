@@ -20,7 +20,7 @@ class VideoViewModel extends _$VideoViewModel {
       throw Exception('No video url');
     }
 
-    final controller = await initializeVideo(grape.videoUrl!);
+    final controller = await _initializeVideo(grape.videoUrl!);
 
     return VideoState(
       grape: grape,
@@ -28,7 +28,7 @@ class VideoViewModel extends _$VideoViewModel {
     );
   }
 
-  Future<VideoPlayerController> initializeVideo(String videoUrl) async {
+  Future<VideoPlayerController> _initializeVideo(String videoUrl) async {
     // videoUrl で動画を取得する
     final controller = VideoPlayerController.networkUrl(
       Uri.parse(videoUrl),

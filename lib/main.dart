@@ -8,7 +8,7 @@ import 'package:grape_support/rooting/router.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final cameras = await availableCameras();
+  await availableCameras();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
