@@ -172,14 +172,14 @@ CHECKOUT OPTIONS:
     :tag: 10.18.0
 
 SPEC CHECKSUMS:
-  camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
-  cloud_firestore: 9b25b77371a845d07a48e5146799f6d4552f5940
+  camera_avfoundation: 6841f9d1468415f905b3f5ea52ab1466ca506730
+  cloud_firestore: 0bd1f6c4601c92e8e158d863d81a4df832be3c0b
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  file_picker: 5f42b9d5580e30b57b4863f9d94b448016b702e5
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
-  firebase_core: f802c5c1f6caff9b8d38b591a36e7b25f8878936
-  firebase_storage: 95b470ab32351049dfd3d97b595460ce7a189971
+  firebase_core: 12f8a657095afeb0409df7761a89e6baa01e7b91
+  firebase_storage: 1514bfda2583f020dc653aeefde4f794a304dd69
   FirebaseAppCheckInterop: 3cd914842ba46f4304050874cd284de82f154ffd
   FirebaseAuthInterop: 5818713dcd7239beb96c1125e4b14d6a5a910e5f
   FirebaseCore: 2322423314d92f946219c8791674d2f3345b598f
@@ -192,14 +192,14 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
+  path_provider_foundation: 2a68637f8a62df7f6e790a428d1bdf72cb4e2d59
+  printing: 54ff03f28fe9ba3aa93358afb80a8595a071dd07
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
   SDWebImage: 7ac2b7ddc5e8484c79aa90fc4e30b149d6a2c88f
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
+  video_player_avfoundation: 74584d47d3e53b88362a9948ab61d4a0d2aa42d2
 
 PODFILE CHECKSUM: 05fd7ab63517414a871b51f23c2301c21a3f22b8
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2
