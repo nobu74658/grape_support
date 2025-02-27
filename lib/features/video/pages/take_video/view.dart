@@ -111,8 +111,6 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
   }
 
   Future<void> _stopVideo(BuildContext context) async {
-    unawaited(SD.circular(context));
-
     final XFile video = await controller.stopVideoRecording();
     setState(() {});
 
@@ -146,7 +144,6 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       debugPrint('video size: ${file.lengthSync()} bytes');
 
       if (context.mounted) {
-        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('動画をアップロードしました')),
         );
