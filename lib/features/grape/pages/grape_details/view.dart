@@ -87,7 +87,7 @@ class GrapeDetailsPage extends ConsumerWidget {
                     onTap: () {
                       unawaited(
                         context.push(
-                          '${TakeVideoScreen.path}/${data.grape.grapeId}',
+                          '${ConnectedTakeVideoScreen.path}/${data.grape.grapeId}',
                         ),
                       );
                     },
