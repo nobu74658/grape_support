@@ -46,17 +46,13 @@ GoRouter router(RouterRef ref) => GoRouter(
 
             /// video
             GoRoute(
-              path: '${TakeVideoScreen.path.deleteSlash}/:${Keys.grapeId}',
-              // TODO: fix 初期化処理
+              path: '${ConnectedTakeVideoScreen.path.deleteSlash}/:${Keys.grapeId}',
               builder: (context, state) {
-                final cameraState = ref.watch(cameraProvider);
-                return cameraState.when(
-                  error: (err, stack) => const Scaffold(),
-                  loading: () => const Scaffold(),
-                  data: (camera) => TakeVideoScreen(
-                    camera: camera,
-                    grapeId: state.pathParameters[Keys.grapeId] ?? '',
-                  ),
+                if (state.pathParameters[Keys.grapeId] == null) {
+                  throw Exception('grapeId is null');
+                }
+                return ConnectedTakeVideoScreen(
+                  grapeId: state.pathParameters[Keys.grapeId]!,
                 );
               },
             ),

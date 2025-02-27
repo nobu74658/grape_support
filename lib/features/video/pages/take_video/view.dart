@@ -1,10 +1,37 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grape_support/providers/camera/camera.dart';
 import 'package:video_player/video_player.dart';
+
+class ConnectedTakeVideoScreen extends ConsumerWidget {
+  const ConnectedTakeVideoScreen({required this.grapeId, super.key});
+
+  static const path = '/take_video';
+  final String grapeId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cameraState = ref.watch(cameraProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('動画撮影')),
+      body: cameraState.when(
+        loading: () => const CircularProgressIndicator(),
+        data: (camera) => TakeVideoScreen(camera: camera, grapeId: 'grapeId'),
+        error: (err, stack) {
+          debugPrint('error: $err');
+          return const Placeholder();
+        },
+      ),
+    );
+  }
+}
 
 class TakeVideoScreen extends StatefulWidget {
   const TakeVideoScreen({
@@ -12,8 +39,6 @@ class TakeVideoScreen extends StatefulWidget {
     required this.grapeId,
     super.key,
   });
-
-  static const path = '/take_video';
 
   final CameraDescription camera;
   final String grapeId;
@@ -34,7 +59,7 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
         return;
       }
       setState(() {});
-    }).catchError((Object e) {
+    }).catchError((e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
@@ -133,9 +158,9 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
 // 撮影した動画を表示する画面
 class VideoPreview extends StatefulWidget {
   const VideoPreview({
-    Key? key,
     required this.videoPath,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String videoPath;
 
