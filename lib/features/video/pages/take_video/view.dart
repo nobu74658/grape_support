@@ -147,6 +147,9 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
 
       if (context.mounted) {
         Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('動画をアップロードしました')),
+        );
       }
     } on Exception catch (e) {
       debugPrint('FirebaseStorageException: $e');
