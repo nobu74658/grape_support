@@ -1,6 +1,7 @@
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grape_support/domain/grape/domain.dart';
 import 'package:grape_support/features/app/grapes_state.dart';
@@ -69,7 +70,16 @@ class GrapeListPage extends ConsumerWidget {
 
               return ListTile(
                 title: Text(grape.grapeId),
-                trailing: Text(date),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (grape.videoUrl != null) ...[
+                      const Icon(Icons.video_collection_sharp),
+                      const Gap(16),
+                    ],
+                    Text(date),
+                  ],
+                ),
                 onTap: () async =>
                     context.push('${GrapeDetailsPage.path}/${grape.grapeId}'),
               );
