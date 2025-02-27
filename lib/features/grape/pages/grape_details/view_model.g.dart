@@ -7,7 +7,7 @@ part of 'view_model.dart';
 // **************************************************************************
 
 String _$grapeDetailsViewModelHash() =>
-    r'1dd232439d28e26bc4d3cd4ef965d670b881b3e8';
+    r'f31dc65b02fa22b719aafd6978ea003291c62ce8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ abstract class _$GrapeDetailsViewModel
     extends BuildlessAutoDisposeAsyncNotifier<GrapeDetailsState> {
   late final String grapeId;
 
-  Future<GrapeDetailsState> build(
+  FutureOr<GrapeDetailsState> build(
     String grapeId,
   );
 }
@@ -116,7 +116,7 @@ class GrapeDetailsViewModelProvider
   final String grapeId;
 
   @override
-  Future<GrapeDetailsState> runNotifierBuild(
+  FutureOr<GrapeDetailsState> runNotifierBuild(
     covariant GrapeDetailsViewModel notifier,
   ) {
     return notifier.build(

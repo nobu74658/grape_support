@@ -21,7 +21,7 @@ final grapeCollectionProvider = Provider<CollectionReference<Grape>>.internal(
 );
 
 typedef GrapeCollectionRef = ProviderRef<CollectionReference<Grape>>;
-String _$grapeRepoHash() => r'681be4f9097eaa27ef7d7e44cbd8148996eff020';
+String _$grapeRepoHash() => r'1f3345afc885bdf5b260bb9fa47fd1c6d4464430';
 
 /// See also [GrapeRepo].
 @ProviderFor(GrapeRepo)

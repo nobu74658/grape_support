@@ -8,7 +8,7 @@ import 'package:grape_support/utils/constants/padding.dart';
 enum NextPageType {
   createQR(CreateQRPage.path, 'QRコード作成', Icons.qr_code),
   scanQR(ScanQrPage.path, 'QRコード読み取り', Icons.camera_alt_outlined),
-  grapeList(GrapeListPage.path, '一覧表示', Icons.list);
+  grapeList(ConnectedGrapeListPage.path, '一覧表示', Icons.list);
 
   const NextPageType(
     this.path,

@@ -24,8 +24,8 @@ GoRouter router(RouterRef ref) => GoRouter(
           routes: [
             /// grape
             GoRoute(
-              path: GrapeListPage.path.deleteSlash,
-              builder: (context, state) => const GrapeListPage(),
+              path: ConnectedGrapeListPage.path.deleteSlash,
+              builder: (context, state) => const ConnectedGrapeListPage(),
             ),
             GoRoute(
               path: '${GrapeDetailsPage.path.deleteSlash}/:${Keys.grapeId}',

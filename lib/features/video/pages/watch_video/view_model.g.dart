@@ -6,7 +6,7 @@ part of 'view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoViewModelHash() => r'474069c87ddf81bc22f0ad5c28328acd234a7b83';
+String _$videoViewModelHash() => r'5acc567b82a36df31c31ce55ec3c262ff66a0d00';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -33,7 +33,7 @@ abstract class _$VideoViewModel
     extends BuildlessAutoDisposeAsyncNotifier<VideoState> {
   late final String grapeId;
 
-  Future<VideoState> build(
+  FutureOr<VideoState> build(
     String grapeId,
   );
 }
@@ -113,7 +113,7 @@ class VideoViewModelProvider
   final String grapeId;
 
   @override
-  Future<VideoState> runNotifierBuild(
+  FutureOr<VideoState> runNotifierBuild(
     covariant VideoViewModel notifier,
   ) {
     return notifier.build(

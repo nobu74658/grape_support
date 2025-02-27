@@ -42,4 +42,17 @@ class GrapeRepo extends _$GrapeRepo {
     print(stream.first);
     return stream;
   }
+
+  Future<(List<Grape>, DocumentSnapshot<Grape>)> getGrapeList(
+    int limit,
+    DocumentSnapshot<Grape>? startAfter,
+  ) async {
+    final query =
+        _grapeCollection.orderBy(Keys.createdAt, descending: true).limit(limit);
+    if (startAfter != null) {
+      query.startAfterDocument(startAfter);
+    }
+    final snapshot = await query.get();
+    return (snapshot.docs.map((doc) => doc.data()).toList(), snapshot.docs.last);
+  }
 }
