@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grape_support/primary/show_dialog.dart';
 import 'package:grape_support/providers/camera/camera.dart';
 import 'package:video_player/video_player.dart';
 
@@ -20,7 +21,6 @@ class ConnectedTakeVideoScreen extends ConsumerWidget {
     final cameraState = ref.watch(cameraProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('動画撮影')),
       body: cameraState.when(
         loading: () => const CircularProgressIndicator(),
         data: (camera) => TakeVideoScreen(camera: camera, grapeId: 'grapeId'),
@@ -111,6 +111,8 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
   }
 
   Future<void> _stopVideo(BuildContext context) async {
+    unawaited(SD.circular(context));
+
     final XFile video = await controller.stopVideoRecording();
     setState(() {});
 
@@ -142,6 +144,10 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       debugPrint('uploaded video...$endTime');
       debugPrint('経過時間: ${endTime.difference(startTime).inMilliseconds}ms');
       debugPrint('video size: ${file.lengthSync()} bytes');
+
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     } on Exception catch (e) {
       debugPrint('FirebaseStorageException: $e');
     }
