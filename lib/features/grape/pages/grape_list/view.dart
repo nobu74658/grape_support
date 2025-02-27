@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:grape_support/domain/grape/domain.dart';
 import 'package:grape_support/features/app/grapes_state.dart';
 import 'package:grape_support/features/grape/pages/grape_details/view.dart';
+import 'package:intl/intl.dart';
 
 class ConnectedGrapeListPage extends ConsumerWidget {
   const ConnectedGrapeListPage({super.key});
@@ -44,12 +45,35 @@ class GrapeListPage extends ConsumerWidget {
             await state.loadMore();
           },
           child: ListView.builder(
-            itemCount: grapes.length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text('grape $index'),
-              onTap: () async => context
-                  .push('${GrapeDetailsPage.path}/${grapes[index].grapeId}'),
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 16,
             ),
+            itemCount: grapes.length + 1,
+            itemBuilder: (context, index) {
+              if (index == grapes.length) {
+                return Align(
+                  child: TextButton(
+                    onPressed: () async {
+                      final state = ref.read(grapesStateProvider.notifier);
+                      await state.loadMore();
+                    },
+                    child: const Text('もっと見る'),
+                  ),
+                );
+              }
+
+              final grape = grapes[index];
+              final format = DateFormat('yyyy/MM/dd HH:mm');
+              final date = format.format(grape.createdAt);
+
+              return ListTile(
+                title: Text(grape.grapeId),
+                trailing: Text(date),
+                onTap: () async =>
+                    context.push('${GrapeDetailsPage.path}/${grape.grapeId}'),
+              );
+            },
           ),
         ),
       );

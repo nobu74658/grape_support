@@ -66,6 +66,7 @@ dependencies:
   path_provider: ^2.1.1
   firebase_storage: ^11.4.1
   custom_refresh_indicator: ^4.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
