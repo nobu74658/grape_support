@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grape_support/primary/show_dialog.dart';
 import 'package:grape_support/providers/camera/camera.dart';
 import 'package:video_player/video_player.dart';
 
