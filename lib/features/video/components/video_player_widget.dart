@@ -30,8 +30,7 @@ class VideoPlayerWidget extends StatelessWidget {
           children: <Widget>[
             const Spacer(),
             InteractiveViewer(
-              boundaryMargin: const EdgeInsets.all(double.infinity),
-              minScale: 0.5,
+              minScale: 1,
               maxScale: 4,
               child: AspectRatio(
                 aspectRatio: controller.value.aspectRatio,
