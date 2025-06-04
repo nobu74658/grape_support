@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:grape_support/features/video/components/basic_overlay_widget.dart';
+import 'package:grape_support/features/video/components/app_video_progress_indicator.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatelessWidget {
@@ -10,19 +12,40 @@ class VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
   @override
-  Widget build(BuildContext context) => controller.value.isInitialized
-      ? Container(alignment: Alignment.topCenter, child: buildVideo())
-      : Container();
-
-  Widget buildVideo() => Stack(
-        children: <Widget>[
-          buildVideoPlayer(),
-          Positioned.fill(child: BasicOverlayWidget(controller: controller)),
-        ],
+  Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return const Center(
+        child: CircularProgressIndicator(),
       );
+    }
 
-  Widget buildVideoPlayer() => AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: VideoPlayer(controller),
-      );
+    return SafeArea(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => controller.value.isPlaying
+            ? unawaited(controller.pause())
+            : unawaited(controller.play()),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Spacer(),
+            InteractiveViewer(
+              minScale: 1,
+              maxScale: 4,
+              child: AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: VideoPlayer(controller),
+              ),
+            ),
+            const Spacer(),
+            AppVideoProgressIndicator(
+              controller,
+              progressBarHeight: 20,
+              allowScrubbing: true,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
