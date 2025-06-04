@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grape_support/providers/camera/camera.dart';
+import 'package:grape_support/services/video_cache_service.dart';
 import 'package:video_player/video_player.dart';
 
 class ConnectedTakeVideoScreen extends ConsumerWidget {
@@ -22,7 +23,7 @@ class ConnectedTakeVideoScreen extends ConsumerWidget {
     return Scaffold(
       body: cameraState.when(
         loading: () => const CircularProgressIndicator(),
-        data: (camera) => TakeVideoScreen(camera: camera, grapeId: 'grapeId'),
+        data: (camera) => TakeVideoScreen(camera: camera, grapeId: grapeId),
         error: (err, stack) {
           debugPrint('error: $err');
           return const Placeholder();
@@ -32,7 +33,7 @@ class ConnectedTakeVideoScreen extends ConsumerWidget {
   }
 }
 
-class TakeVideoScreen extends StatefulWidget {
+class TakeVideoScreen extends ConsumerStatefulWidget {
   const TakeVideoScreen({
     required this.camera,
     required this.grapeId,
@@ -46,7 +47,7 @@ class TakeVideoScreen extends StatefulWidget {
   TakeVideoScreenState createState() => TakeVideoScreenState();
 }
 
-class TakeVideoScreenState extends State<TakeVideoScreen> {
+class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
   late CameraController controller;
 
   @override
@@ -141,6 +142,15 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       debugPrint('uploaded video...$endTime');
       debugPrint('経過時間: ${endTime.difference(startTime).inMilliseconds}ms');
       debugPrint('video size: ${file.lengthSync()} bytes');
+
+      // ローカルキャッシュにも保存
+      try {
+        final cacheService = ref.read(videoCacheServiceProvider.notifier);
+        await cacheService.saveVideoLocally(widget.grapeId, video.path);
+        debugPrint('Video saved to local cache');
+      } catch (e) {
+        debugPrint('Error saving to local cache: $e');
+      }
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
