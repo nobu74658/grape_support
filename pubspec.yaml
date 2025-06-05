@@ -49,6 +49,7 @@ dependencies:
   # ジェネレータ
   build_runner: ^2.4.6
   json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
 
   # Firebase
   firebase_core: ^2.18.0
@@ -70,6 +71,8 @@ dependencies:
   gap: ^3.0.1
   hooks_riverpod: ^2.6.1
   flutter_hooks: ^0.20.5
+  dio: ^5.3.2
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

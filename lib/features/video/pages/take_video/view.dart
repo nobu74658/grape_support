@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grape_support/providers/camera/camera.dart';
+import 'package:grape_support/services/video_cache_service.dart';
 import 'package:video_player/video_player.dart';
 
 class ConnectedTakeVideoScreen extends ConsumerWidget {
@@ -22,7 +23,7 @@ class ConnectedTakeVideoScreen extends ConsumerWidget {
     return Scaffold(
       body: cameraState.when(
         loading: () => const CircularProgressIndicator(),
-        data: (camera) => TakeVideoScreen(camera: camera, grapeId: 'grapeId'),
+        data: (camera) => TakeVideoScreen(camera: camera, grapeId: grapeId),
         error: (err, stack) {
           debugPrint('error: $err');
           return const Placeholder();
@@ -32,7 +33,7 @@ class ConnectedTakeVideoScreen extends ConsumerWidget {
   }
 }
 
-class TakeVideoScreen extends StatefulWidget {
+class TakeVideoScreen extends ConsumerStatefulWidget {
   const TakeVideoScreen({
     required this.camera,
     required this.grapeId,
@@ -46,19 +47,20 @@ class TakeVideoScreen extends StatefulWidget {
   TakeVideoScreenState createState() => TakeVideoScreenState();
 }
 
-class TakeVideoScreenState extends State<TakeVideoScreen> {
+class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
   late CameraController controller;
 
   @override
   void initState() {
     super.initState();
     controller = CameraController(widget.camera, ResolutionPreset.max);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((e) {
+    unawaited(
+      controller.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      }).catchError((e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
@@ -69,12 +71,13 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
             break;
         }
       }
-    });
+    }),
+    );
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    unawaited(controller.dispose());
     super.dispose();
   }
 
@@ -142,6 +145,15 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       debugPrint('経過時間: ${endTime.difference(startTime).inMilliseconds}ms');
       debugPrint('video size: ${file.lengthSync()} bytes');
 
+      // ローカルキャッシュにも保存
+      try {
+        final cacheService = ref.read(videoCacheServiceProvider.notifier);
+        await cacheService.saveVideoLocally(widget.grapeId, video.path);
+        debugPrint('Video saved to local cache');
+      } on Exception catch (e) {
+        debugPrint('Error saving to local cache: $e');
+      }
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('動画をアップロードしました')),
@@ -151,12 +163,14 @@ class TakeVideoScreenState extends State<TakeVideoScreen> {
       debugPrint('FirebaseStorageException: $e');
     }
     // 表示用の画面に遷移
-    await Navigator.of(context).push(
+    if (context.mounted) {
+      await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => VideoPreview(videoPath: video.path),
         fullscreenDialog: true,
       ),
-    );
+      );
+    }
   }
 }
 
@@ -170,7 +184,7 @@ class VideoPreview extends StatefulWidget {
   final String videoPath;
 
   @override
-  _VideoPreviewState createState() => _VideoPreviewState();
+  State<VideoPreview> createState() => _VideoPreviewState();
 }
 
 class _VideoPreviewState extends State<VideoPreview> {
@@ -180,10 +194,12 @@ class _VideoPreviewState extends State<VideoPreview> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(File(widget.videoPath));
-    _controller.initialize().then((_) {
-      setState(() {});
-      _controller.play();
-    });
+    unawaited(
+      _controller.initialize().then((_) {
+        setState(() {});
+        unawaited(_controller.play());
+      }),
+    );
   }
 
   @override
@@ -204,7 +220,7 @@ class _VideoPreviewState extends State<VideoPreview> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    unawaited(_controller.dispose());
     super.dispose();
   }
 }

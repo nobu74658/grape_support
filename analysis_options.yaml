@@ -1,6 +1,7 @@
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - "**/*.freezed.dart"
   errors:
     avoid_print: ignore
     missing_required_param: warning
