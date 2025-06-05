@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:grape_support/services/video_cache_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,9 +11,24 @@ class CacheManager extends _$CacheManager {
 
   /// アプリ起動時にキャッシュクリーンアップを実行
   Future<void> initializeCache() async {
-    final cacheService = ref.read(videoCacheServiceProvider.notifier);
-    await cacheService.loadCacheMetadata();
-    await cacheService.cleanupCache();
+    try {
+      final cacheService = ref.read(videoCacheServiceProvider.notifier);
+      
+      // メタデータの読み込みを確実に実行
+      debugPrint('🔄 Loading cache metadata on app startup...');
+      await cacheService.loadCacheMetadata();
+      
+      // 読み込み後の状態をログ出力
+      final cacheState = ref.read(videoCacheServiceProvider);
+      debugPrint('📊 Loaded ${cacheState.length} cache entries');
+      
+      // キャッシュクリーンアップ
+      await cacheService.cleanupCache();
+      
+      debugPrint('✅ Cache initialization completed');
+    } on Exception catch (e) {
+      debugPrint('❌ Cache initialization failed: $e');
+    }
   }
 
   /// 定期的なキャッシュクリーンアップ

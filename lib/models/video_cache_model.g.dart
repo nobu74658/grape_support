@@ -11,8 +11,8 @@ _$VideoCacheModelImpl _$$VideoCacheModelImplFromJson(
     _$VideoCacheModelImpl(
       grapeId: json['grapeId'] as String,
       remoteUrl: json['remoteUrl'] as String,
-      localPath: json['localPath'] as String?,
       status: $enumDecode(_$CacheStatusEnumMap, json['status']),
+      localPath: json['localPath'] as String?,
       downloadProgress: (json['downloadProgress'] as num?)?.toDouble(),
       lastAccessed: json['lastAccessed'] == null
           ? null
@@ -26,8 +26,8 @@ Map<String, dynamic> _$$VideoCacheModelImplToJson(
     <String, dynamic>{
       'grapeId': instance.grapeId,
       'remoteUrl': instance.remoteUrl,
-      'localPath': instance.localPath,
       'status': _$CacheStatusEnumMap[instance.status]!,
+      'localPath': instance.localPath,
       'downloadProgress': instance.downloadProgress,
       'lastAccessed': instance.lastAccessed?.toIso8601String(),
       'fileSizeBytes': instance.fileSizeBytes,

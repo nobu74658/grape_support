@@ -22,8 +22,8 @@ VideoCacheModel _$VideoCacheModelFromJson(Map<String, dynamic> json) {
 mixin _$VideoCacheModel {
   String get grapeId => throw _privateConstructorUsedError;
   String get remoteUrl => throw _privateConstructorUsedError;
-  String? get localPath => throw _privateConstructorUsedError;
   CacheStatus get status => throw _privateConstructorUsedError;
+  String? get localPath => throw _privateConstructorUsedError;
   double? get downloadProgress => throw _privateConstructorUsedError;
   DateTime? get lastAccessed => throw _privateConstructorUsedError;
   int? get fileSizeBytes => throw _privateConstructorUsedError;
@@ -44,8 +44,8 @@ abstract class $VideoCacheModelCopyWith<$Res> {
   $Res call(
       {String grapeId,
       String remoteUrl,
-      String? localPath,
       CacheStatus status,
+      String? localPath,
       double? downloadProgress,
       DateTime? lastAccessed,
       int? fileSizeBytes,
@@ -67,8 +67,8 @@ class _$VideoCacheModelCopyWithImpl<$Res, $Val extends VideoCacheModel>
   $Res call({
     Object? grapeId = null,
     Object? remoteUrl = null,
-    Object? localPath = freezed,
     Object? status = null,
+    Object? localPath = freezed,
     Object? downloadProgress = freezed,
     Object? lastAccessed = freezed,
     Object? fileSizeBytes = freezed,
@@ -83,14 +83,14 @@ class _$VideoCacheModelCopyWithImpl<$Res, $Val extends VideoCacheModel>
           ? _value.remoteUrl
           : remoteUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      localPath: freezed == localPath
-          ? _value.localPath
-          : localPath // ignore: cast_nullable_to_non_nullable
-              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as CacheStatus,
+      localPath: freezed == localPath
+          ? _value.localPath
+          : localPath // ignore: cast_nullable_to_non_nullable
+              as String?,
       downloadProgress: freezed == downloadProgress
           ? _value.downloadProgress
           : downloadProgress // ignore: cast_nullable_to_non_nullable
@@ -122,8 +122,8 @@ abstract class _$$VideoCacheModelImplCopyWith<$Res>
   $Res call(
       {String grapeId,
       String remoteUrl,
-      String? localPath,
       CacheStatus status,
+      String? localPath,
       double? downloadProgress,
       DateTime? lastAccessed,
       int? fileSizeBytes,
@@ -143,8 +143,8 @@ class __$$VideoCacheModelImplCopyWithImpl<$Res>
   $Res call({
     Object? grapeId = null,
     Object? remoteUrl = null,
-    Object? localPath = freezed,
     Object? status = null,
+    Object? localPath = freezed,
     Object? downloadProgress = freezed,
     Object? lastAccessed = freezed,
     Object? fileSizeBytes = freezed,
@@ -159,14 +159,14 @@ class __$$VideoCacheModelImplCopyWithImpl<$Res>
           ? _value.remoteUrl
           : remoteUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      localPath: freezed == localPath
-          ? _value.localPath
-          : localPath // ignore: cast_nullable_to_non_nullable
-              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as CacheStatus,
+      localPath: freezed == localPath
+          ? _value.localPath
+          : localPath // ignore: cast_nullable_to_non_nullable
+              as String?,
       downloadProgress: freezed == downloadProgress
           ? _value.downloadProgress
           : downloadProgress // ignore: cast_nullable_to_non_nullable
@@ -193,8 +193,8 @@ class _$VideoCacheModelImpl implements _VideoCacheModel {
   const _$VideoCacheModelImpl(
       {required this.grapeId,
       required this.remoteUrl,
-      this.localPath,
       required this.status,
+      this.localPath,
       this.downloadProgress,
       this.lastAccessed,
       this.fileSizeBytes,
@@ -208,9 +208,9 @@ class _$VideoCacheModelImpl implements _VideoCacheModel {
   @override
   final String remoteUrl;
   @override
-  final String? localPath;
-  @override
   final CacheStatus status;
+  @override
+  final String? localPath;
   @override
   final double? downloadProgress;
   @override
@@ -222,7 +222,7 @@ class _$VideoCacheModelImpl implements _VideoCacheModel {
 
   @override
   String toString() {
-    return 'VideoCacheModel(grapeId: $grapeId, remoteUrl: $remoteUrl, localPath: $localPath, status: $status, downloadProgress: $downloadProgress, lastAccessed: $lastAccessed, fileSizeBytes: $fileSizeBytes, fileHash: $fileHash)';
+    return 'VideoCacheModel(grapeId: $grapeId, remoteUrl: $remoteUrl, status: $status, localPath: $localPath, downloadProgress: $downloadProgress, lastAccessed: $lastAccessed, fileSizeBytes: $fileSizeBytes, fileHash: $fileHash)';
   }
 
   @override
@@ -233,9 +233,9 @@ class _$VideoCacheModelImpl implements _VideoCacheModel {
             (identical(other.grapeId, grapeId) || other.grapeId == grapeId) &&
             (identical(other.remoteUrl, remoteUrl) ||
                 other.remoteUrl == remoteUrl) &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.localPath, localPath) ||
                 other.localPath == localPath) &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.downloadProgress, downloadProgress) ||
                 other.downloadProgress == downloadProgress) &&
             (identical(other.lastAccessed, lastAccessed) ||
@@ -248,8 +248,8 @@ class _$VideoCacheModelImpl implements _VideoCacheModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, grapeId, remoteUrl, localPath,
-      status, downloadProgress, lastAccessed, fileSizeBytes, fileHash);
+  int get hashCode => Object.hash(runtimeType, grapeId, remoteUrl, status,
+      localPath, downloadProgress, lastAccessed, fileSizeBytes, fileHash);
 
   @JsonKey(ignore: true)
   @override
@@ -270,8 +270,8 @@ abstract class _VideoCacheModel implements VideoCacheModel {
   const factory _VideoCacheModel(
       {required final String grapeId,
       required final String remoteUrl,
-      final String? localPath,
       required final CacheStatus status,
+      final String? localPath,
       final double? downloadProgress,
       final DateTime? lastAccessed,
       final int? fileSizeBytes,
@@ -285,9 +285,9 @@ abstract class _VideoCacheModel implements VideoCacheModel {
   @override
   String get remoteUrl;
   @override
-  String? get localPath;
-  @override
   CacheStatus get status;
+  @override
+  String? get localPath;
   @override
   double? get downloadProgress;
   @override

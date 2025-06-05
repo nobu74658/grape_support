@@ -25,10 +25,10 @@ class VideoCacheService extends _$VideoCacheService {
     final cacheModel = state[grapeId];
 
     // 既にキャッシュされている場合
-    if (cacheModel?.status == CacheStatus.cached && 
+    if (cacheModel?.status == CacheStatus.cached &&
         cacheModel?.localPath != null) {
       final file = File(cacheModel!.localPath!);
-      if (await file.exists()) {
+      if (file.existsSync()) {
         // アクセス時間を更新
         await _updateLastAccessed(grapeId);
         return cacheModel.localPath;
@@ -44,13 +44,51 @@ class VideoCacheService extends _$VideoCacheService {
     return _downloadVideo(grapeId, remoteUrl);
   }
 
+  /// 能動的に動画をダウンロード（再生せずにキャッシュのみ）
+  Future<void> downloadVideoManually(String grapeId, String remoteUrl) async {
+    final cacheModel = state[grapeId];
+
+    // 既にキャッシュされている場合はスキップ
+    if (cacheModel?.status == CacheStatus.cached) {
+      debugPrint('Video already cached: $grapeId');
+      return;
+    }
+
+    // ダウンロード中の場合はスキップ
+    if (cacheModel?.status == CacheStatus.downloading) {
+      debugPrint('Video already downloading: $grapeId');
+      return;
+    }
+
+    debugPrint('Starting manual download for: $grapeId');
+    await _downloadVideo(grapeId, remoteUrl);
+  }
+
+  /// ダウンロードをキャンセル
+  Future<void> cancelDownload(String grapeId) async {
+    final cacheModel = state[grapeId];
+
+    if (cacheModel?.status == CacheStatus.downloading) {
+      // エラー状態に設定してダウンロードを停止
+      final cancelledModel = cacheModel!.copyWith(
+        status: CacheStatus.notCached,
+        downloadProgress: null,
+      );
+
+      state = {...state, grapeId: cancelledModel};
+      await _saveCacheMetadata();
+
+      debugPrint('Download cancelled for: $grapeId');
+    }
+  }
+
   /// 動画をローカルに保存
   Future<String?> saveVideoLocally(String grapeId, String filePath) async {
     try {
       final cacheDir = await _getCacheDirectory();
       final file = File(filePath);
-      
-      if (!await file.exists()) {
+
+      if (!file.existsSync()) {
         debugPrint('Source file does not exist: $filePath');
         return null;
       }
@@ -80,7 +118,7 @@ class VideoCacheService extends _$VideoCacheService {
 
       debugPrint('Video saved locally: ${cachedFile.path}');
       return cachedFile.path;
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving video locally: $e');
       return null;
     }
@@ -125,7 +163,7 @@ class VideoCacheService extends _$VideoCacheService {
       final hash = _generateFileHash(fileBytes);
       final finalFileName = '${grapeId}_$hash$extension';
       final finalFile = File(path.join(cacheDir.path, finalFileName));
-      
+
       await tempFile.rename(finalFile.path);
 
       // キャッシュ完了状態に更新
@@ -143,11 +181,14 @@ class VideoCacheService extends _$VideoCacheService {
       state = {...state, grapeId: cachedModel};
       await _saveCacheMetadata();
 
-      debugPrint('Video downloaded successfully: ${finalFile.path}');
+      final sizeInMB = (fileBytes.length / (1024 * 1024)).toStringAsFixed(1);
+      debugPrint(
+        'Video downloaded successfully: ${finalFile.path} (${sizeInMB}MB)',
+      );
       return finalFile.path;
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error downloading video: $e');
-      
+
       // エラー状態に更新
       final errorModel = state[grapeId]?.copyWith(
         status: CacheStatus.error,
@@ -155,7 +196,7 @@ class VideoCacheService extends _$VideoCacheService {
       if (errorModel != null) {
         state = {...state, grapeId: errorModel};
       }
-      
+
       return null;
     }
   }
@@ -164,11 +205,11 @@ class VideoCacheService extends _$VideoCacheService {
   Future<Directory> _getCacheDirectory() async {
     final appDir = await getApplicationDocumentsDirectory();
     final cacheDir = Directory(path.join(appDir.path, _cacheDir));
-    
-    if (!await cacheDir.exists()) {
+
+    if (!cacheDir.existsSync()) {
       await cacheDir.create(recursive: true);
     }
-    
+
     return cacheDir;
   }
 
@@ -193,19 +234,19 @@ class VideoCacheService extends _$VideoCacheService {
     try {
       final cacheDir = await _getCacheDirectory();
       final metadataFile = File(path.join(cacheDir.path, _metadataFile));
-      
-      if (await metadataFile.exists()) {
+
+      if (metadataFile.existsSync()) {
         final jsonString = await metadataFile.readAsString();
         final Map<String, dynamic> jsonData = json.decode(jsonString);
-        
+
         final Map<String, VideoCacheModel> loadedCache = {};
         for (final entry in jsonData.entries) {
           loadedCache[entry.key] = VideoCacheModel.fromJson(entry.value);
         }
-        
+
         state = loadedCache;
       }
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error loading cache metadata: $e');
     }
   }
@@ -215,14 +256,14 @@ class VideoCacheService extends _$VideoCacheService {
     try {
       final cacheDir = await _getCacheDirectory();
       final metadataFile = File(path.join(cacheDir.path, _metadataFile));
-      
+
       final Map<String, dynamic> jsonData = {};
       for (final entry in state.entries) {
         jsonData[entry.key] = entry.value.toJson();
       }
-      
+
       await metadataFile.writeAsString(json.encode(jsonData));
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving cache metadata: $e');
     }
   }
@@ -231,7 +272,7 @@ class VideoCacheService extends _$VideoCacheService {
   Future<void> cleanupCache() async {
     try {
       int totalSize = 0;
-      
+
       // 現在のキャッシュサイズを計算
       for (final model in state.values) {
         if (model.fileSizeBytes != null) {
@@ -243,37 +284,43 @@ class VideoCacheService extends _$VideoCacheService {
       if (totalSize > _maxCacheSizeBytes) {
         final sortedModels = state.values.toList()
           ..sort((a, b) {
-            final aTime = a.lastAccessed ?? DateTime.fromMillisecondsSinceEpoch(0);
-            final bTime = b.lastAccessed ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final aTime =
+                a.lastAccessed ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final bTime =
+                b.lastAccessed ?? DateTime.fromMillisecondsSinceEpoch(0);
             return aTime.compareTo(bTime);
           });
 
         final updatedState = Map<String, VideoCacheModel>.from(state);
-        
+
         for (final model in sortedModels) {
-          if (totalSize <= (_maxCacheSizeBytes * 0.8).round()) break;
-          
+          if (totalSize <= (_maxCacheSizeBytes * 0.8).round()) {
+            break;
+          }
+
           if (model.localPath != null) {
             final file = File(model.localPath!);
-            if (await file.exists()) {
+            if (file.existsSync()) {
               await file.delete();
             }
           }
-          
+
           if (model.fileSizeBytes != null) {
             totalSize -= model.fileSizeBytes!;
           }
-          
+
           updatedState.remove(model.grapeId);
         }
-        
+
         state = updatedState;
         await _saveCacheMetadata();
-        
+
         final sizeInMB = totalSize / (1024 * 1024);
-        debugPrint('Cache cleanup completed. New size: ${sizeInMB.toStringAsFixed(2)}MB');
+        debugPrint(
+          'Cache cleanup completed. New size: ${sizeInMB.toStringAsFixed(2)}MB',
+        );
       }
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error during cache cleanup: $e');
     }
   }
@@ -283,15 +330,15 @@ class VideoCacheService extends _$VideoCacheService {
     final model = state[grapeId];
     if (model?.localPath != null) {
       final file = File(model!.localPath!);
-      if (await file.exists()) {
+      if (file.existsSync()) {
         await file.delete();
       }
     }
-    
-    final updatedState = Map<String, VideoCacheModel>.from(state);
-    updatedState.remove(grapeId);
+
+    final updatedState = Map<String, VideoCacheModel>.from(state)
+      ..remove(grapeId);
     state = updatedState;
-    
+
     await _saveCacheMetadata();
   }
 
@@ -299,12 +346,12 @@ class VideoCacheService extends _$VideoCacheService {
   Future<void> clearAllCache() async {
     try {
       final cacheDir = await _getCacheDirectory();
-      if (await cacheDir.exists()) {
+      if (cacheDir.existsSync()) {
         await cacheDir.delete(recursive: true);
       }
       state = {};
       debugPrint('All cache cleared');
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error clearing cache: $e');
     }
   }

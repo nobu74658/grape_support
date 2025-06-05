@@ -54,12 +54,13 @@ class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
   void initState() {
     super.initState();
     controller = CameraController(widget.camera, ResolutionPreset.max);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((e) {
+    unawaited(
+      controller.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      }).catchError((e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
@@ -70,12 +71,13 @@ class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
             break;
         }
       }
-    });
+    }),
+    );
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    unawaited(controller.dispose());
     super.dispose();
   }
 
@@ -148,7 +150,7 @@ class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
         final cacheService = ref.read(videoCacheServiceProvider.notifier);
         await cacheService.saveVideoLocally(widget.grapeId, video.path);
         debugPrint('Video saved to local cache');
-      } catch (e) {
+      } on Exception catch (e) {
         debugPrint('Error saving to local cache: $e');
       }
 
@@ -161,12 +163,14 @@ class TakeVideoScreenState extends ConsumerState<TakeVideoScreen> {
       debugPrint('FirebaseStorageException: $e');
     }
     // 表示用の画面に遷移
-    await Navigator.of(context).push(
+    if (context.mounted) {
+      await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => VideoPreview(videoPath: video.path),
         fullscreenDialog: true,
       ),
-    );
+      );
+    }
   }
 }
 
@@ -180,7 +184,7 @@ class VideoPreview extends StatefulWidget {
   final String videoPath;
 
   @override
-  _VideoPreviewState createState() => _VideoPreviewState();
+  State<VideoPreview> createState() => _VideoPreviewState();
 }
 
 class _VideoPreviewState extends State<VideoPreview> {
@@ -190,10 +194,12 @@ class _VideoPreviewState extends State<VideoPreview> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(File(widget.videoPath));
-    _controller.initialize().then((_) {
-      setState(() {});
-      _controller.play();
-    });
+    unawaited(
+      _controller.initialize().then((_) {
+        setState(() {});
+        unawaited(_controller.play());
+      }),
+    );
   }
 
   @override
@@ -214,7 +220,7 @@ class _VideoPreviewState extends State<VideoPreview> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    unawaited(_controller.dispose());
     super.dispose();
   }
 }

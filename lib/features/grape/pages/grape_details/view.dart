@@ -27,9 +27,10 @@ class GrapeDetailsPage extends ConsumerWidget {
     final state = ref.watch(grapeDetailsViewModelProvider(grapeId));
     final cardWidth = (context.deviceWidth - PaddingStyle.p16 * 3) / 2;
 
-    // ignore: unused_local_variable
-    final qrCode =
-        ref.read(createQRViewModelProvider.notifier).createQrCode(grapeId);
+    // Create QR code asynchronously without awaiting
+    unawaited(
+      ref.read(createQRViewModelProvider.notifier).createQrCode(grapeId),
+    );
 
     return state.when(
       error: (err, stack) => PrimaryWhenWidget(
@@ -107,7 +108,10 @@ class GrapeDetailsPage extends ConsumerWidget {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width,
                 child: PdfPreview(
-                  build: (format) async => qrCode.then((value) => value.save()),
+                  build: (format) async => ref
+                      .read(createQRViewModelProvider.notifier)
+                      .createQrCode(grapeId)
+                      .then((value) => value.save()),
                   allowPrinting: false,
                   allowSharing: false,
                   canChangePageFormat: false,

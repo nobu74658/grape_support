@@ -8,8 +8,7 @@ class VideoCacheModel with _$VideoCacheModel {
   const factory VideoCacheModel({
     required String grapeId,
     required String remoteUrl,
-    String? localPath,
-    required CacheStatus status,
+    required CacheStatus status, String? localPath,
     double? downloadProgress,
     DateTime? lastAccessed,
     int? fileSizeBytes,
